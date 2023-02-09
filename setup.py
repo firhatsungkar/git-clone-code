@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="git-clone-code",
+    name="clc",
     version='1.0.0',
     description="CLI for automatically clone git repo in the custom dir structures.",
     packages=find_packages(),
