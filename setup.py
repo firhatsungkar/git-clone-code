@@ -11,6 +11,6 @@ setup(
     ],
     entry_points='''
     [console_scripts]
-    clc=clc:main
+    clc=clc.clc:main
     '''
 )
