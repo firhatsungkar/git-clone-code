@@ -24,6 +24,9 @@ class Repo:
     repo_owner: str
     repo_name: str
 
+    def __post_init__(self):
+        self.repo_name = self.repo_name.replace('.git', '')
+
 def _parse_repo_address(repo_address: str) -> Repo:
     if repo_address.startswith('https') or repo_address.startswith('http'):
         protocol, uri = tuple(repo_address.split('://'))
@@ -42,13 +45,16 @@ def _parse_repo_address(repo_address: str) -> Repo:
 def _invoke_clone_git(repo: Repo, default_clone_type=None):
     target_dir = os.path.join(CODE_DIR, repo.repo_vendor, repo.repo_owner, repo.repo_name)
     cmdline = ['git', 'clone', repo.repo_address, target_dir]
-    if default_clone_type:
-        if default_clone_type == CLONE_TYPES.HTTP or default_clone_type == CLONE_TYPES.HTTPS:
+    repo_clone_type = default_clone_type if default_clone_type else repo.repo_clone_type
+    print(repo_clone_type)
+    if repo_clone_type:
+        if repo_clone_type == CLONE_TYPES.HTTP or default_clone_type == CLONE_TYPES.HTTPS:
             repo_address = f"{default_clone_type}://{repo.repo_vendor}/{repo.repo_owner}/{repo.repo_name}.git"
             cmdline = ['git', 'clone', repo_address, target_dir]
-        if default_clone_type == CLONE_TYPES.SSH:
+        if repo_clone_type == CLONE_TYPES.SSH:
             repo_address = f"git@{repo.repo_vendor}:{repo.repo_owner}/{repo.repo_name}.git"
             cmdline = ['git', 'clone', repo_address, target_dir]
+    click.echo(f"{' '.join(cmdline)}")
     call(cmdline)
 
 @click.command()
