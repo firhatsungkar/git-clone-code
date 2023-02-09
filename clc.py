@@ -54,7 +54,6 @@ def _invoke_clone_git(repo: Repo, default_clone_type=None):
         if repo_clone_type == CLONE_TYPES.SSH:
             repo_address = f"git@{repo.repo_vendor}:{repo.repo_owner}/{repo.repo_name}.git"
             cmdline = ['git', 'clone', repo_address, target_dir]
-    click.echo(f"{' '.join(cmdline)}")
     call(cmdline)
 
 @click.command()
